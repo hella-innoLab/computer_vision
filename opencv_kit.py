@@ -58,20 +58,17 @@ def canny_edge_detection(image, low_threshold=100, high_threshold=200):
 
     
 def detect_rectangle_statistical(image):
-    if len(image.shape) == 3:
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
     # Alle weißen Punkte finden
     white_points = np.column_stack(np.where(image == 255))  # (y, x)
 
     if len(white_points) == 0:
         return image
 
-    # **1. DBSCAN für Rauschfilterung**
+    # 1. DBSCAN für Rauschfilterung**
     clustering = DBSCAN(eps=10, min_samples=10).fit(white_points)  # eps=5: Max. Abstand
     labels = clustering.labels_
 
-    # **2. 
+    # 2. Finden des flächenmäßig größten Clusters
     output_image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)  # Das Bild in BGR umwandeln, um Rechtecke zu zeichnen
     output_image=roi.copy()
     
@@ -242,7 +239,7 @@ if __name__ == '__main__':
         ]
         filters_to_apply_approach2=[to_grayscale,gaussian_blur,threshold_filter,remove_noise_with_morphology,detect_rectangle_statistical]
 
-        filters_to_apply=[to_grayscale,gaussian_blur,threshold_filter,remove_noise_with_morphology]
+        filters_to_apply=[to_grayscale,gaussian_blur,threshold_filter,remove_noise_with_morphology,detect_rectangle_statistical
 
 
         # Wende die Filter an
